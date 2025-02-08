@@ -28,6 +28,9 @@
       "@/*": [
         "./src/*"
       ],
+      "@config": [
+        "./config.json"
+      ],
       "@test-utils": [
         "./test-utils"
       ]

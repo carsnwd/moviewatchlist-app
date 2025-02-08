@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -13,6 +13,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+if (window.location.hostname === "localhost") {
+    connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
