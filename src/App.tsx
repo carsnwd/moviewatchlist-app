@@ -1,13 +1,17 @@
 import '@mantine/core/styles.css';
 
-import { MantineProvider } from '@mantine/core';
-import { Router } from './Router';
+import { AppShell, MantineProvider } from '@mantine/core';
 import { theme } from './theme';
+import { AuthProvider } from '@/contexts/AuthContext/AuthContext';
+import AppHeader from './components/AppHeader/AppHeader';
+import { AppRouter } from './Router';
 
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <Router />
-    </MantineProvider>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
+    </MantineProvider >
   );
 }
