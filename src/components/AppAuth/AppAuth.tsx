@@ -1,11 +1,10 @@
 import { useAuth } from '@/contexts/AuthContext/AuthContext';
-import { auth } from '@/firebaseConfig';
+import { auth, githubProvider, googleProvider } from '@/firebaseConfig';
 import { Tabs } from '@mantine/core';
 import AuthPanel from './AuthPanel/AuthPanel';
+import { signInWithPopup } from 'firebase/auth';
 
 export default function AppAuth() {
-    const { userName } = useAuth();
-
     return (
         <Tabs defaultValue="login">
             <Tabs.List grow={true}>
