@@ -1,12 +1,15 @@
 import AppShell from "@/components/AppShell/AppShell";
+import MoviesTable from "@/components/MoviesTable/MoviesTable";
 import { auth } from "@/firebaseConfig";
+import { Watchlist } from "@/services/WatchlistAPIService/models/Watchlist";
 import { WatchlistAPIService } from "@/services/WatchlistAPIService/WatchlistAPIService";
+import { LoadingOverlay } from "@mantine/core";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
-export function HomePage(props: { watchlistAPIService: WatchlistAPIService }) {
+export function HomePage(props: { watchlistAPIService?: WatchlistAPIService }) {
   const { watchlistAPIService = WatchlistAPIService.getInstance() } = props;
-  const [watchlist, setWatchlist] = useState<any[]>([]);
+  const [watchlist, setWatchlist] = useState<Watchlist>({ movies: [] });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [authInitialized, setAuthInitialized] = useState<boolean>(false);
@@ -17,11 +20,10 @@ export function HomePage(props: { watchlistAPIService: WatchlistAPIService }) {
       if (user) {
         try {
           const data = await watchlistAPIService.getWatchlist();
-          setWatchlist(data.movies);
+          setWatchlist(data);
         } catch (error: any) {
           setError(error.message);
         } finally {
-          console.log(watchlist)
           setLoading(false);
         }
       } else {
@@ -32,12 +34,8 @@ export function HomePage(props: { watchlistAPIService: WatchlistAPIService }) {
     return () => unsubscribe();
   }, [watchlistAPIService]);
 
-  if (!authInitialized) {
-    return <AppShell>Initializing...</AppShell>;
-  }
-
-  if (loading) {
-    return <AppShell>Loading...</AppShell>;
+  if (!authInitialized || loading) {
+    return <AppShell><LoadingOverlay /></AppShell>;
   }
 
   if (error) {
@@ -46,9 +44,7 @@ export function HomePage(props: { watchlistAPIService: WatchlistAPIService }) {
 
   return (
     <AppShell>
-      {watchlist.map((movie) => (
-        <div key={movie.id}>{movie.title}</div>
-      ))}
+      <MoviesTable {...watchlist} />
     </AppShell>
   );
 }

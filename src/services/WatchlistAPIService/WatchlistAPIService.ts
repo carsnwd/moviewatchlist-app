@@ -1,11 +1,14 @@
 import { auth } from "@/firebaseConfig";
 import config from "../../../config.json"
+import { MoviesFactoryService } from "../MoviesFactoryService/MoviesFactoryService";
+import { MovieDTO } from "./models/Movie";
 
 export class WatchlistAPIService {
-    private constructor() {
-
+    private constructor(moviesFactoryService?: MoviesFactoryService) {
+        this.moviesFactoryService = moviesFactoryService ?? MoviesFactoryService.getInstance();
     }
 
+    private moviesFactoryService: MoviesFactoryService;
     static instance: WatchlistAPIService;
 
     static getInstance() {
@@ -13,6 +16,13 @@ export class WatchlistAPIService {
             WatchlistAPIService.instance = new WatchlistAPIService();
         }
         return WatchlistAPIService.instance;
+    }
+
+    private async parseWatchlistFromGetRequest(response: Response) {
+        const json = await response.json();
+        return {
+            movies: json.movies.map((movie: MovieDTO) => this.moviesFactoryService.createMovie(movie)),
+        }
     }
 
     public async getWatchlist() {
@@ -27,7 +37,6 @@ export class WatchlistAPIService {
                 'Authorization': `Bearer ${token}`
             }
         });
-        const json = await response.json();
-        return json;
+        return await this.parseWatchlistFromGetRequest(response);
     }
 }
