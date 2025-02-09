@@ -1,5 +1,6 @@
 import AppShell from "@/components/AppShell/AppShell";
 import MoviesTable from "@/components/MoviesTable/MoviesTable";
+import { useAuth } from "@/contexts/AuthContext";
 import { auth } from "@/firebaseConfig";
 import { Watchlist } from "@/services/WatchlistAPIService/models/Watchlist";
 import { WatchlistAPIService } from "@/services/WatchlistAPIService/WatchlistAPIService";
@@ -12,11 +13,10 @@ export function HomePage(props: { watchlistAPIService?: WatchlistAPIService }) {
   const [watchlist, setWatchlist] = useState<Watchlist>({ movies: [] });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [authInitialized, setAuthInitialized] = useState<boolean>(false);
+  const { authInitialized, user } = useAuth();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      setAuthInitialized(true);
+    const fetchWatchlist = async () => {
       if (user) {
         try {
           const data = await watchlistAPIService.getWatchlist();
@@ -29,10 +29,9 @@ export function HomePage(props: { watchlistAPIService?: WatchlistAPIService }) {
       } else {
         setLoading(false);
       }
-    });
-
-    return () => unsubscribe();
-  }, [watchlistAPIService]);
+    };
+    fetchWatchlist();
+  }, [authInitialized, user, watchlistAPIService]);
 
   if (!authInitialized || loading) {
     return <AppShell><LoadingOverlay /></AppShell>;

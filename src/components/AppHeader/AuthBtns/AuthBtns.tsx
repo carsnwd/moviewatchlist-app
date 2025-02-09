@@ -1,10 +1,10 @@
-import { useAuth } from '@/contexts/AuthContext/AuthContext';
-import { Button, useMantineTheme } from '@mantine/core';
+import { Button, LoadingOverlay, useMantineTheme } from '@mantine/core';
 import { auth } from '@/firebaseConfig'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function AuthBtns() {
-    const { userName } = useAuth();
+    const { authInitialized, user } = useAuth();
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
@@ -24,9 +24,13 @@ export default function AuthBtns() {
         </div>)
     }
 
+    if (!authInitialized) {
+        return <LoadingOverlay />
+    }
+
     return (
         <>
-            {userName ? renderLogoutBtn() : renderLoginSignUpBtns()}
+            {user ? renderLogoutBtn() : renderLoginSignUpBtns()}
         </>
     )
 }

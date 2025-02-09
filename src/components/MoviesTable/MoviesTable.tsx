@@ -1,10 +1,13 @@
 import { Movie } from '@/services/WatchlistAPIService/models/Movie';
 import { Watchlist } from '@/services/WatchlistAPIService/models/Watchlist'
 import { MantineReactTable, MRT_ColumnDef, useMantineReactTable } from 'mantine-react-table';
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
+import TmdbSearch from '../TmdbSearch/TmdbSearch';
+import MovieSearchModal from '../AddMovieModal/AddMovieModal';
+import { Button } from '@mantine/core';
 
 export default function MoviesTable(watchlist: Watchlist) {
-    //should be memoized or stable
+    const [modalOpened, setModalOpened] = useState(false);
     const columns = useMemo<MRT_ColumnDef<Movie>[]>(
         () => [
             {
@@ -49,5 +52,19 @@ export default function MoviesTable(watchlist: Watchlist) {
         }
     });
 
-    return <MantineReactTable table={table} />;
+    const handleModalSubmit = (movieId: string, fileName?: string, fileSize?: number) => {
+        console.log('Selected Movie ID:', movieId);
+        console.log('File Name:', fileName);
+        console.log('File Size:', fileSize);
+    };
+
+    return <>
+        <Button onClick={() => setModalOpened(true)}>Add Movie</Button>
+        <MovieSearchModal
+            opened={modalOpened}
+            onClose={() => setModalOpened(false)}
+            onSubmit={handleModalSubmit}
+        />
+        <MantineReactTable table={table} />;
+    </>
 }

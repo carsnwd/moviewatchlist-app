@@ -1,8 +1,5 @@
-import { useAuth } from '@/contexts/AuthContext/AuthContext';
-import { auth, githubProvider, googleProvider } from '@/firebaseConfig';
 import { Tabs } from '@mantine/core';
 import AuthPanel from './AuthPanel/AuthPanel';
-import { signInWithPopup } from 'firebase/auth';
 
 export default function AppAuth() {
     return (
