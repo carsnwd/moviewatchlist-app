@@ -1,5 +1,5 @@
 import { useWatchlist } from "@/contexts/WatchlistContext";
-import { LoadingOverlay, Button, Group } from "@mantine/core";
+import { LoadingOverlay } from "@mantine/core";
 import AppShell from "@/components/AppShell/AppShell";
 import MoviesTable from "@/components/MoviesTable/MoviesTable";
 import { useAuth } from "@/contexts/AuthContext";

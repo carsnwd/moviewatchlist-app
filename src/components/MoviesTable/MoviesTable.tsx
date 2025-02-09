@@ -2,15 +2,16 @@ import { Movie } from '@/services/WatchlistAPIService/models/Movie';
 import { MantineReactTable, MRT_ColumnDef, useMantineReactTable } from 'mantine-react-table';
 import { useMemo, useState } from 'react'
 import MovieSearchModal from '../AddMovieModal/AddMovieModal';
-import { Button, Group } from '@mantine/core';
+import { ActionIcon, Box, Button, Group, useMantineTheme } from '@mantine/core';
 import { useWatchlist } from '@/contexts/WatchlistContext';
 import { WatchlistAPIService } from '@/services/WatchlistAPIService/WatchlistAPIService';
-import { IconPlus, IconRefresh } from '@tabler/icons-react';
+import { IconEdit, IconPlus, IconRefresh, IconTrash } from '@tabler/icons-react';
 
 export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIService }) {
     const { watchlistAPIService = WatchlistAPIService.getInstance() } = props;
     const [modalOpened, setModalOpened] = useState(false);
     const { watchlist, refetchWatchlist } = useWatchlist();
+    const theme = useMantineTheme();
     const columns = useMemo<MRT_ColumnDef<Movie>[]>(
         () => [
             {
@@ -52,10 +53,21 @@ export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIS
             columnVisibility: {
                 overview: false
             }
-        }
+        },
+        enableRowActions: true,
+        renderRowActions: ({ row }) => (
+            <Box>
+                <ActionIcon variant="subtle" onClick={() => console.info({ "Edit": row })}>
+                    <IconEdit />
+                </ActionIcon>
+                <ActionIcon variant="subtle" color={theme.colors.red[9]} onClick={() => console.info({ "Delete": row })}>
+                    <IconTrash />
+                </ActionIcon>
+            </Box>
+        ),
     });
 
-    const handleModalSubmit = async (movieId: string, fileName?: string, fileSize?: number) => {
+    const handleAddMovieSubmit = async (movieId: string, fileName?: string, fileSize?: number) => {
         await watchlistAPIService.addMovieToWatchlist({ movieId, fileName, fileSize });
         refetchWatchlist();
     };
@@ -68,7 +80,7 @@ export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIS
         <MovieSearchModal
             opened={modalOpened}
             onClose={() => setModalOpened(false)}
-            onSubmit={handleModalSubmit}
+            onSubmit={handleAddMovieSubmit}
         />
         <MantineReactTable table={table} />
     </>
