@@ -1,7 +1,7 @@
 import { auth } from "@/firebaseConfig";
 import config from "../../../config.json"
 import { MoviesFactoryService } from "../MoviesFactoryService/MoviesFactoryService";
-import { AddMovieToWatchlistDTO, Movie, MovieDTO } from "./models/Movie";
+import { AddMovieToWatchlistDTO, Movie, MovieDTO, UpdateMovieOnWatchlistDTO } from "./models/Movie";
 
 export class WatchlistAPIService {
     private constructor(moviesFactoryService?: MoviesFactoryService) {
@@ -63,6 +63,40 @@ export class WatchlistAPIService {
 
         const token = await user.getIdToken();
         await fetch(`${config.WATCHLIST_API_URL}/watchlist/add`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(movie)
+        });
+    }
+
+    public async removeMovieFromWatchlist(movieId: string) {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("User is not authenticated");
+        }
+
+        const token = await user.getIdToken();
+        await fetch(`${config.WATCHLIST_API_URL}/watchlist/remove`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ movieId })
+        });
+    }
+
+    public async updateMovieInWatchlist(movie: UpdateMovieOnWatchlistDTO) {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("User is not authenticated");
+        }
+
+        const token = await user.getIdToken();
+        await fetch(`${config.WATCHLIST_API_URL}/watchlist/update`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

@@ -23,3 +23,9 @@ export type AddMovieToWatchlistDTO = {
     fileName?: string;
     fileSize?: number;
 }
+
+export type UpdateMovieOnWatchlistDTO = {
+    movieId: string;
+    fileName?: string;
+    fileSize?: number;
+}

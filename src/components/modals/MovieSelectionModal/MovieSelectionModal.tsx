@@ -1,14 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, TextInput, Button, Group, NumberInput } from '@mantine/core';
 import TmdbSearch from '@/components/TmdbSearch/TmdbSearch';
 
-interface MovieSearchModalProps {
+interface MovieSelectionModalProps {
     opened: boolean;
     onClose: () => void;
     onSubmit: (movieId: string, fileName?: string, fileSize?: number) => void;
+    initialMovieId?: string;
+    initialFileName?: string;
+    initialFileSize?: number;
+    initialMovieTitle?: string;
 }
 
-export default function MovieSearchModal({ opened, onClose, onSubmit }: MovieSearchModalProps) {
+export default function MovieSelectionModal({
+    opened,
+    onClose,
+    onSubmit,
+    initialMovieId = '',
+    initialFileName = '',
+    initialFileSize = 0,
+    initialMovieTitle = '',
+}: MovieSelectionModalProps) {
+    useEffect(() => {
+        setSelectedMovie(initialMovieId);
+        setFileName(initialFileName);
+        setFileSize(initialFileSize);
+    }, [initialMovieId, initialFileName, initialFileSize]);
+
     const [selectedMovie, setSelectedMovie] = useState<string | null>(null);
     const [fileName, setFileName] = useState('');
     const [fileSize, setFileSize] = useState(0);
@@ -30,7 +48,7 @@ export default function MovieSearchModal({ opened, onClose, onSubmit }: MovieSea
 
     return (
         <Modal opened={opened} onClose={onClose} title="Search for a Movie">
-            <TmdbSearch onSelect={handleSelectMovie} error={error} />
+            <TmdbSearch onSelect={handleSelectMovie} error={error} initialTitle={initialMovieTitle} initialValue={initialMovieId} />
             <TextInput
                 label="File Name"
                 value={fileName}

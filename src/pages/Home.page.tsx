@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 
 export function HomePage() {
   const { loading, error } = useWatchlist();
-  const { user } = useAuth();
+  const { authInitialized, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (authInitialized && !user) {
       navigate("/auth")
     }
   })

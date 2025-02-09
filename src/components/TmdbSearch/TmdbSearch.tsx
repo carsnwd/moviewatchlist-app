@@ -7,10 +7,14 @@ interface SearchComponentProps {
     onSelect: (value: string) => void;
     watchlistAPIService?: WatchlistAPIService;
     error: string | null;
+    initialValue?: string;
+    initialTitle?: string;
 }
 
-export default function TmdbSearch({ onSelect, watchlistAPIService = WatchlistAPIService.getInstance(), error }: SearchComponentProps) {
-    const [query, setQuery] = useState('');
+export default function TmdbSearch({ onSelect, watchlistAPIService = WatchlistAPIService.getInstance(), error,
+    initialValue = '',
+    initialTitle = '', }: SearchComponentProps) {
+    const [query, setQuery] = useState(initialTitle ?? '');
     const [debouncedQuery] = useDebouncedValue(query, 300); // Debounce the query with a delay of 300ms
     const [data, setData] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
@@ -50,6 +54,7 @@ export default function TmdbSearch({ onSelect, watchlistAPIService = WatchlistAP
             onOptionSubmit={(value: string) => onSelect(value)}
             placeholder="Search..."
             error={error}
+            defaultValue={initialValue}
         />
     );
 }
