@@ -1,5 +1,5 @@
 import { AuthService } from '@/services/AuthService/AuthService';
-import { Button, Flex, TextInput, useMantineTheme } from '@mantine/core'
+import { Button, Flex, TextInput, Text, useMantineTheme } from '@mantine/core'
 import { IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,7 @@ export default function AuthPanel(props: { authType: 'login' | 'register', authS
     const theme = useMantineTheme();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const getOAuthBtnVerbiage = () => {
@@ -17,12 +18,16 @@ export default function AuthPanel(props: { authType: 'login' | 'register', authS
     }
 
     const emailAndPasswordAuth = async () => {
-        if (props.authType === 'login') {
-            await authService.loginWithEmailPassword(email, password);
-        } else {
-            await authService.registerWithEmailPassword(email, password);
+        try {
+            if (props.authType === 'login') {
+                await authService.loginWithEmailPassword(email, password);
+            } else {
+                await authService.registerWithEmailPassword(email, password);
+            }
+            navigate('/');
+        } catch (error: any) {
+            setError(error?.message);
         }
-        navigate('/');
     }
 
     const handleOAuthLogin = async (type: "google" | "github") => {
@@ -34,6 +39,7 @@ export default function AuthPanel(props: { authType: 'login' | 'register', authS
         <>
             <TextInput label="Email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} />
             <TextInput label="Password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} type="password" mb="sm" />
+            <Text c={theme.colors.red[9]}>{error}</Text>
             <Flex direction={'column'} gap="sm">
                 <Button onClick={() => emailAndPasswordAuth()}>Submit</Button>
                 <Button color={theme.colors.red[9]} leftSection={<IconBrandGoogle />} onClick={() => handleOAuthLogin("google")}>{getOAuthBtnVerbiage()} with Google</Button>

@@ -1,5 +1,4 @@
 import { auth } from "@/firebaseConfig";
-import config from "../../../config.json"
 import { MoviesFactoryService } from "../MoviesFactoryService/MoviesFactoryService";
 import { AddMovieToWatchlistDTO, Movie, MovieDTO, UpdateMovieOnWatchlistDTO } from "./models/Movie";
 
@@ -32,7 +31,7 @@ export class WatchlistAPIService {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch(`${config.WATCHLIST_API_URL}/watchlist`, {
+        const response = await fetch(`${import.meta.env.VITE_WATCHLIST_API_URL}/watchlist`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -47,7 +46,7 @@ export class WatchlistAPIService {
         }
 
         const token = await user.getIdToken();
-        const response = await fetch(`${config.WATCHLIST_API_URL}/movies/search?query=${query}`, {
+        const response = await fetch(`${import.meta.env.VITE_WATCHLIST_API_URL}/movies/search?query=${query}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -62,7 +61,7 @@ export class WatchlistAPIService {
         }
 
         const token = await user.getIdToken();
-        await fetch(`${config.WATCHLIST_API_URL}/watchlist/add`, {
+        await fetch(`${import.meta.env.VITE_WATCHLIST_API_URL}/watchlist/add`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -79,7 +78,7 @@ export class WatchlistAPIService {
         }
 
         const token = await user.getIdToken();
-        await fetch(`${config.WATCHLIST_API_URL}/watchlist/remove`, {
+        await fetch(`${import.meta.env.VITE_WATCHLIST_API_URL}/watchlist/remove`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -96,7 +95,7 @@ export class WatchlistAPIService {
         }
 
         const token = await user.getIdToken();
-        await fetch(`${config.WATCHLIST_API_URL}/watchlist/update`, {
+        await fetch(`${import.meta.env.VITE_WATCHLIST_API_URL}/watchlist/update`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

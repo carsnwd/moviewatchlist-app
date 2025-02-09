@@ -14,7 +14,7 @@ export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIS
     const [addOrEditState, setAddOrEditState] = useState<'add' | 'edit'>('add');
     const [removeMovieModalOpened, setRemoveMovieModalOpened] = useState(false);
     const [{ selectedMovieTitle, selectedMovieId, selectedFileName, selectedFileSize }, setSelectedMovieData] = useState({ selectedMovieTitle: '', selectedMovieId: '', selectedFileName: '', selectedFileSize: 0 });
-    const { watchlist, refetchWatchlist } = useWatchlist();
+    const { watchlist, refetchWatchlist, loading } = useWatchlist();
     const theme = useMantineTheme();
     const columns = useMemo<MRT_ColumnDef<Movie>[]>(
         () => [
@@ -53,6 +53,7 @@ export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIS
     const table = useMantineReactTable({
         columns,
         data: watchlist.movies,
+        state: { isLoading: loading },
         initialState: {
             columnVisibility: {
                 overview: false
