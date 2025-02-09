@@ -1,7 +1,7 @@
 import { auth } from "@/firebaseConfig";
 import config from "../../../config.json"
 import { MoviesFactoryService } from "../MoviesFactoryService/MoviesFactoryService";
-import { Movie, MovieDTO } from "./models/Movie";
+import { AddMovieToWatchlistDTO, Movie, MovieDTO } from "./models/Movie";
 
 export class WatchlistAPIService {
     private constructor(moviesFactoryService?: MoviesFactoryService) {
@@ -55,20 +55,20 @@ export class WatchlistAPIService {
         return await response.json();
     }
 
-    public async addMovieToWatchlist(movie: Movie) {
+    public async addMovieToWatchlist(movie: AddMovieToWatchlistDTO) {
         const user = auth.currentUser;
         if (!user) {
             throw new Error("User is not authenticated");
         }
 
         const token = await user.getIdToken();
-        await fetch(`${config.WATCHLIST_API_URL}/watchlist`, {
+        await fetch(`${config.WATCHLIST_API_URL}/watchlist/add`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ id: movie.id, fileName: movie.fileName, fileSize: movie.fileSize })
+            body: JSON.stringify(movie)
         });
     }
 }

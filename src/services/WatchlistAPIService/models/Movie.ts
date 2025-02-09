@@ -17,3 +17,9 @@ export type MovieDTO = {
     file_name?: string
     file_size?: number
 }
+
+export type AddMovieToWatchlistDTO = {
+    movieId: string;
+    fileName?: string;
+    fileSize?: number;
+}

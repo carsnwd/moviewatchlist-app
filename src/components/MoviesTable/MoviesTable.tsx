@@ -1,13 +1,15 @@
 import { Movie } from '@/services/WatchlistAPIService/models/Movie';
-import { Watchlist } from '@/services/WatchlistAPIService/models/Watchlist'
 import { MantineReactTable, MRT_ColumnDef, useMantineReactTable } from 'mantine-react-table';
-import React, { useMemo, useState } from 'react'
-import TmdbSearch from '../TmdbSearch/TmdbSearch';
+import { useMemo, useState } from 'react'
 import MovieSearchModal from '../AddMovieModal/AddMovieModal';
 import { Button } from '@mantine/core';
+import { useWatchlist } from '@/contexts/WatchlistContext';
+import { WatchlistAPIService } from '@/services/WatchlistAPIService/WatchlistAPIService';
 
-export default function MoviesTable(watchlist: Watchlist) {
+export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIService }) {
+    const { watchlistAPIService = WatchlistAPIService.getInstance() } = props;
     const [modalOpened, setModalOpened] = useState(false);
+    const { watchlist, refetchWatchlist } = useWatchlist();
     const columns = useMemo<MRT_ColumnDef<Movie>[]>(
         () => [
             {
@@ -52,10 +54,9 @@ export default function MoviesTable(watchlist: Watchlist) {
         }
     });
 
-    const handleModalSubmit = (movieId: string, fileName?: string, fileSize?: number) => {
-        console.log('Selected Movie ID:', movieId);
-        console.log('File Name:', fileName);
-        console.log('File Size:', fileSize);
+    const handleModalSubmit = async (movieId: string, fileName?: string, fileSize?: number) => {
+        await watchlistAPIService.addMovieToWatchlist({ movieId, fileName, fileSize });
+        refetchWatchlist();
     };
 
     return <>
@@ -65,6 +66,6 @@ export default function MoviesTable(watchlist: Watchlist) {
             onClose={() => setModalOpened(false)}
             onSubmit={handleModalSubmit}
         />
-        <MantineReactTable table={table} />;
+        <MantineReactTable table={table} />
     </>
 }
