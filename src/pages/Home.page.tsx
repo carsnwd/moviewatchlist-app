@@ -2,9 +2,20 @@ import { useWatchlist } from "@/contexts/WatchlistContext";
 import { LoadingOverlay, Button, Group } from "@mantine/core";
 import AppShell from "@/components/AppShell/AppShell";
 import MoviesTable from "@/components/MoviesTable/MoviesTable";
+import { useAuth } from "@/contexts/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function HomePage() {
-  const { loading, error, refetchWatchlist } = useWatchlist();
+  const { loading, error } = useWatchlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth")
+    }
+  })
 
   if (loading) {
     return <AppShell><LoadingOverlay /></AppShell>;
@@ -16,9 +27,6 @@ export function HomePage() {
 
   return (
     <AppShell>
-      <Group mb="md">
-        <Button onClick={refetchWatchlist}>Refresh</Button>
-      </Group>
       <MoviesTable />
     </AppShell>
   );

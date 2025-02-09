@@ -2,9 +2,10 @@ import { Movie } from '@/services/WatchlistAPIService/models/Movie';
 import { MantineReactTable, MRT_ColumnDef, useMantineReactTable } from 'mantine-react-table';
 import { useMemo, useState } from 'react'
 import MovieSearchModal from '../AddMovieModal/AddMovieModal';
-import { Button } from '@mantine/core';
+import { Button, Group } from '@mantine/core';
 import { useWatchlist } from '@/contexts/WatchlistContext';
 import { WatchlistAPIService } from '@/services/WatchlistAPIService/WatchlistAPIService';
+import { IconPlus, IconRefresh } from '@tabler/icons-react';
 
 export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIService }) {
     const { watchlistAPIService = WatchlistAPIService.getInstance() } = props;
@@ -60,7 +61,10 @@ export default function MoviesTable(props: { watchlistAPIService?: WatchlistAPIS
     };
 
     return <>
-        <Button onClick={() => setModalOpened(true)}>Add Movie</Button>
+        <Group mb={10} style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button onClick={() => setModalOpened(true)} leftSection={<IconPlus />}>Add Movie</Button>
+            <Button variant='subtle' onClick={refetchWatchlist} leftSection={<IconRefresh />}>Refresh</Button>
+        </Group>
         <MovieSearchModal
             opened={modalOpened}
             onClose={() => setModalOpened(false)}

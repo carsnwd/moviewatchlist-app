@@ -11,7 +11,7 @@ export default function AuthBtns() {
     const renderLogoutBtn = () => {
         return (<Button m={2} color={theme.colors.red[9]} onClick={() => {
             auth.signOut();
-            navigate('/');
+            navigate('/auth');
         }}>Logout</Button>)
     }
 
