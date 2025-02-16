@@ -11,6 +11,11 @@ interface SearchComponentProps {
     initialTitle?: string;
 }
 
+function makeMovieTitleAndYear(movie: { title: string, release_date: string }) {
+    const date = new Date(movie.release_date);
+    return `${movie.title} (${date.getFullYear()})`;
+}
+
 export default function TmdbSearch({ onSelect, watchlistAPIService = WatchlistAPIService.getInstance(), error,
     initialValue = '',
     initialTitle = '', }: SearchComponentProps) {
@@ -29,10 +34,10 @@ export default function TmdbSearch({ onSelect, watchlistAPIService = WatchlistAP
             setLoading(true);
             try {
                 const results = await watchlistAPIService.searchMovies(debouncedQuery);
-                setData(results.map((movie: { id: string, title: string }) => {
+                setData(results.map((movie: { id: string, title: string, release_date: string }) => {
                     return {
                         value: movie.id,
-                        label: movie.title,
+                        label: makeMovieTitleAndYear(movie),
                     }
                 }));
             } catch (error) {
@@ -47,6 +52,7 @@ export default function TmdbSearch({ onSelect, watchlistAPIService = WatchlistAP
 
     return (
         <Autocomplete
+            clearable
             value={query}
             onChange={setQuery}
             data={data}

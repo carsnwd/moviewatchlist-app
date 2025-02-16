@@ -3,7 +3,6 @@
     "types": [
       "node",
       "@testing-library/jest-dom",
-      "vitest/globals"
     ],
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -30,14 +29,11 @@
       ],
       "@config": [
         "./config.json"
-      ],
-      "@test-utils": [
-        "./test-utils"
       ]
     }
   },
   "include": [
     "src",
-    "test-utils"
+    "./jest.setup.ts"
   ]
 }
