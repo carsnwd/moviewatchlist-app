@@ -19,7 +19,9 @@ export function WatchlistProvider({ children, watchlistAPIService = WatchlistAPI
     const { authInitialized, user } = useAuth();
 
     const fetchWatchlist = async () => {
-        if (!user) return;
+        if (!user) {
+            return;
+        }
 
         setLoading(true);
         try {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { useNavigate } from 'react-router-dom';
 import AuthPanel from './AuthPanel';
 import { MantineProvider } from '@mantine/core';
 
@@ -14,7 +13,6 @@ const renderWithMantineProvider = (ui: any) => {
 };
 
 describe('AuthPanel', () => {
-    const mockNavigate = useNavigate();
     const mockAuthService = {
         loginWithEmailPassword: jest.fn(),
         registerWithEmailPassword: jest.fn(),

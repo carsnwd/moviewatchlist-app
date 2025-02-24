@@ -4,7 +4,7 @@ import AuthPanel from './AuthPanel/AuthPanel';
 export default function AppAuth() {
     return (
         <Tabs defaultValue="login">
-            <Tabs.List grow={true}>
+            <Tabs.List grow>
                 <Tabs.Tab value="login">Login</Tabs.Tab>
                 <Tabs.Tab value="register">Register</Tabs.Tab>
             </Tabs.List>
