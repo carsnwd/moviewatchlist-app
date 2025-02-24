@@ -11,8 +11,12 @@ jobs:
   build_and_preview:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ 22 ]
     steps:
       - uses: actions/checkout@v4
+      - run: npm run install
       - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
