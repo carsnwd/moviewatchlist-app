@@ -40,7 +40,7 @@ export default function AuthPanel(props: { authType: 'login' | 'register', authS
             <TextInput label="Email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} />
             <TextInput label="Password" value={password} onChange={(event) => setPassword(event.currentTarget.value)} type="password" mb="sm" />
             <Text c={theme.colors.red[9]}>{error}</Text>
-            <Flex direction={'column'} gap="sm">
+            <Flex direction='column' gap="sm">
                 <Button onClick={() => emailAndPasswordAuth()} data-testid="submit-btn">Submit</Button>
                 <Button color={theme.colors.red[9]} leftSection={<IconBrandGoogle />} onClick={() => handleOAuthLogin("google")}>{getOAuthBtnVerbiage()} with Google</Button>
                 <Button color={theme.colors.gray[9]} leftSection={<IconBrandGithub />} onClick={() => handleOAuthLogin("github")}>{getOAuthBtnVerbiage()} with Github</Button>
