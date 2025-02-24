@@ -1,4 +1,4 @@
-# Moviewatchlist-Ap
+# Moviewatchlist-App
 
 ## Features
 
