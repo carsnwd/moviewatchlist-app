@@ -1,4 +1,4 @@
-# Mantine Vite template
+# Moviewatchlist-App
 
 ## Features
 
